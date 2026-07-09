@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegalEase AI: CBA Calculator</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen">
+
+    <!-- Header Navigation -->
+    <header class="bg-white border-b border-gray-200 px-6 py-4">
+        <div class="max-w-5xl mx-auto flex items-center justify-between">
+            <div class="text-lg font-bold text-emerald-600">LegalEase AI <span class="text-gray-400 font-normal">| CBA Calculator</span></div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-12">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight mb-4">Cost-Benefit Analysis: AI Summarizer</h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                This interactive tool helps you understand the financial viability of the LegalEase AI Summarizer feature. Adjust the assumptions below to see your returns update in real-time.
+            </p>
+        </div>
+
+        <!-- Section 1: Inputs Table -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+            <h2 class="text-xl font-bold text-slate-800 mb-2">1. Assumptions & Inputs</h2>
+            <p class="text-sm text-gray-500 mb-6">Modify the values in the "Value" column to explore different scenarios. All subsequent calculations will update automatically.</p>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-600 text-xs font-semibold uppercase tracking-wider border-b border-gray-200">
+                            <th class="py-3 px-4">Category</th>
+                            <th class="py-3 px-4">Item</th>
+                            <th class="py-3 px-4">Value</th>
+                            <th class="py-3 px-4">Unit</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 text-sm">
+                        <!-- Row 1 -->
+                        <tr>
+                            <td class="py-4 px-4 font-semibold text-slate-700">Time Horizon</td>
+                            <td class="py-4 px-4 text-gray-600">Analysis Period</td>
+                            <td class="py-4 px-4">
+                                <input type="number" id="analysisPeriod" value="18" class="w-24 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            </td>
+                            <td class="py-4 px-4 text-gray-500">Months</td>
+                        </tr>
+                        <!-- Row 2 -->
+                        <tr>
+                            <td class="py-4 px-4 font-semibold text-slate-700">Labor Metrics</td>
+                            <td class="py-4 px-4 text-gray-600">Hourly Legal Staff Rate</td>
+                            <td class="py-4 px-4">
+                                <input type="number" id="hourlyRate" value="50" class="w-24 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            </td>
+                            <td class="py-4 px-4 text-gray-500">$/Hour</td>
+                        </tr>
+                        <!-- Row 3 -->
+                        <tr>
+                            <td class="py-4 px-4 font-semibold text-slate-700">Efficiency</td>
+                            <td class="py-4 px-4 text-gray-600">Hours Saved per Month</td>
+                            <td class="py-4 px-4">
+                                <input type="number" id="hoursSaved" value="40" class="w-24 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            </td>
+                            <td class="py-4 px-4 text-gray-500">Hours</td>
+                        </tr>
+                        <!-- Row 4 -->
+                        <tr>
+                            <td class="py-4 px-4 font-semibold text-slate-700">AI Cost</td>
+                            <td class="py-4 px-4 text-gray-600">AI Tool Subscription</td>
+                            <td class="py-4 px-4">
+                                <input type="number" id="aiCost" value="150" class="w-24 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            </td>
+                            <td class="py-4 px-4 text-gray-500">$/Month</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 2: Real-time Results Dashboard -->
+        <div class="bg-slate-900 text-white rounded-xl p-6 shadow-md">
+            <h2 class="text-xl font-bold mb-4">2. Financial Projections</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                    <span class="text-xs text-slate-400 uppercase tracking-wider block mb-1">Total Gross Savings</span>
+                    <span id="totalGross" class="text-2xl font-bold text-emerald-400">$0</span>
+                </div>
+                <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                    <span class="text-xs text-slate-400 uppercase tracking-wider block mb-1">Total Tool Investment</span>
+                    <span id="totalInvestment" class="text-2xl font-bold text-rose-400">$0</span>
+                </div>
+                <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                    <span class="text-xs text-slate-400 uppercase tracking-wider block mb-1">Net Financial Benefit (ROI)</span>
+                    <span id="netBenefit" class="text-2xl font-bold text-sky-400">$0</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Simple JavaScript Calculator Logic -->
+    <script>
+        function calculateCBA() {
+            // 1. Fetch values from input fields
+            const months = parseFloat(document.getElementById('analysisPeriod').value) || 0;
+            const rate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+            const hours = parseFloat(document.getElementById('hoursSaved').value) || 0;
+            const subscription = parseFloat(document.getElementById('aiCost').value) || 0;
+
+            // 2. Perform the Math
+            const monthlyGrossSavings = hours * rate;
+            const totalGrossSavings = monthlyGrossSavings * months;
+            const totalInvestmentCost = subscription * months;
+            const netBenefit = totalGrossSavings - totalInvestmentCost;
+
+            // 3. Update the UI DOM elements dynamically
+            document.getElementById('totalGross').innerText = `$${totalGrossSavings.toLocaleString()}`;
+            document.getElementById('totalInvestment').innerText = `$${totalInvestmentCost.toLocaleString()}`;
+            document.getElementById('netBenefit').innerText = `$${netBenefit.toLocaleString()}`;
+        }
+
+        // Add event listeners so numbers calculate live whenever a user types or toggles arrows
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('input', calculateCBA);
+        });
+
+        // Run initial calculation when page loads
+        calculateCBA();
+    </script>
+</body>
+</html>
